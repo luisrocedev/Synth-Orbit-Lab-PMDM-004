@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synth Orbit Lab · PMDM 004</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="panel left">
+        <h1>Synth Orbit Lab</h1>
+        <p class="sub">Síntesis sonora + animación de rebotes + secuenciador</p>
+
+        <div class="auth-row">
+          <input id="performerName" type="text" placeholder="Nombre" />
+          <input id="performerDni" type="text" placeholder="DNI" value="53945291X" />
+          <button id="btnRegister">Registrar</button>
+        </div>
+
+        <div class="toolbar">
+          <label>BPM <input id="bpm" type="number" min="60" max="220" value="108" /></label>
+          <label>Synth
+            <select id="synthType">
+              <option value="sine">Sine</option>
+              <option value="triangle" selected>Triangle</option>
+              <option value="sawtooth">Saw</option>
+              <option value="square">Square</option>
+            </select>
+          </label>
+          <button id="btnPlaySeq">▶ Secuencia</button>
+          <button id="btnStopSeq">⏹ Stop</button>
+          <button id="btnClearBalls">Limpiar bolas</button>
+        </div>
+
+        <canvas id="stage" width="900" height="460"></canvas>
+        <p id="status">Haz clic en Registrar para iniciar sesión.</p>
+      </section>
+
+      <section class="panel right">
+        <h2>Editor de partitura (16x7)</h2>
+        <div id="grid"></div>
+
+        <form id="saveForm" class="save-row">
+          <input name="title" type="text" placeholder="Título composición" required />
+          <button type="submit">Guardar composición</button>
+        </form>
+
+        <h2>Métricas</h2>
+        <div id="stats" class="kpis"></div>
+
+        <h2>Ranking</h2>
+        <div id="leaders"></div>
+
+        <h2>Composiciones</h2>
+        <div id="compositions"></div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

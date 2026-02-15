@@ -1,0 +1,110 @@
+:root {
+  color-scheme: dark;
+  --bg: #0e1226;
+  --panel: #1a2040;
+  --panel2: #212a52;
+  --line: #364175;
+  --text: #eaf0ff;
+  --muted: #99a7db;
+  --ok: #42e5c2;
+  --warn: #ffd166;
+}
+
+* { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif; }
+body { margin: 0; background: radial-gradient(circle at top, #1b2658, var(--bg) 52%); color: var(--text); }
+
+.layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+.panel {
+  background: linear-gradient(160deg, var(--panel), var(--panel2));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.sub { color: var(--muted); margin-top: -8px; }
+
+.auth-row, .toolbar, .save-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.toolbar { grid-template-columns: 120px 1fr 1fr 1fr 1fr; }
+.save-row { grid-template-columns: 1fr auto; }
+
+input, select, button {
+  border: 1px solid #4a558f;
+  border-radius: 8px;
+  padding: 8px;
+  background: #141a37;
+  color: var(--text);
+}
+button { cursor: pointer; font-weight: 700; }
+button:hover { border-color: #78a0ff; }
+
+#stage {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0a0f24;
+}
+
+#status { color: var(--muted); font-size: 14px; }
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.cell {
+  aspect-ratio: 1/1;
+  border: 1px solid #3f4b84;
+  border-radius: 4px;
+  background: #141a35;
+}
+
+.cell.active {
+  background: #36c2ff;
+  box-shadow: 0 0 10px rgba(54, 194, 255, 0.6);
+}
+
+.cell.playing {
+  border-color: var(--warn);
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.kpi {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  background: #121831;
+}
+
+.kpi strong { display: block; color: var(--muted); font-size: 12px; }
+.kpi span { font-size: 22px; font-weight: 700; color: var(--ok); }
+
+.list { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.list th, .list td { border-bottom: 1px solid #364175; padding: 6px; font-size: 13px; text-align: left; }
+.list th { color: var(--muted); }
+
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 1fr; }
+  .toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
