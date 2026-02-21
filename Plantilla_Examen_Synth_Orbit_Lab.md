@@ -1,4 +1,5 @@
 # 📝 Plantilla Examen PMDM — Synth Orbit Lab
+
 ## Actividad 004 · Síntesis de Sonido
 
 **Alumno:** Luis Jahir Rodriguez Cedeño
@@ -11,6 +12,7 @@
 ## 1. Descripción del proyecto
 
 Synth Orbit Lab es un sintetizador musical interactivo con:
+
 - **2 órbitas** con 7 notas cada una (graves C3–B3, agudos C5–B5)
 - **Bolas que rebotan** dentro de las órbitas y disparan notas al colisionar
 - **Secuenciador 16-step** (grid 16×7) con BPM configurable
@@ -41,6 +43,7 @@ function ensureAudio() {
 ```
 
 **Explicación:**
+
 - `AudioContext` es el motor de sonido del navegador. Solo se crea UNA instancia.
 - `webkitAudioContext` es el fallback para navegadores antiguos (Safari viejo).
 - `createGain()` → crea un nodo de volumen maestro (0.0 silencio – 1.0 máximo).
@@ -48,6 +51,7 @@ function ensureAudio() {
 - `audioCtx.resume()` es necesario porque los navegadores **bloquean el audio** hasta que hay interacción del usuario (política de autoplay).
 
 **Cadena de audio:**
+
 ```
 OscillatorNode → GainNode (volumen nota) → GainNode (master) → destination (altavoz)
 ```
@@ -55,23 +59,33 @@ OscillatorNode → GainNode (volumen nota) → GainNode (master) → destination
 ### 2.2 Sintetizar una nota con OscillatorNode
 
 ```javascript
-function playTone(note, frequency, velocity = 0.6, duration = 0.3, source = "manual") {
+function playTone(
+  note,
+  frequency,
+  velocity = 0.6,
+  duration = 0.3,
+  source = "manual",
+) {
   ensureAudio();
   const now = state.audioCtx.currentTime;
 
   // 1. Crear oscilador (genera la onda sonora)
   const osc = state.audioCtx.createOscillator();
-  osc.type = state.synthType;                           // sine | triangle | sawtooth | square
-  osc.frequency.setValueAtTime(frequency, now);         // Frecuencia en Hz (ej: 440 = La4)
+  osc.type = state.synthType; // sine | triangle | sawtooth | square
+  osc.frequency.setValueAtTime(frequency, now); // Frecuencia en Hz (ej: 440 = La4)
 
   // 2. Crear envolvente de volumen (Attack-Decay)
   const gain = state.audioCtx.createGain();
-  gain.gain.setValueAtTime(0.0001, now);                // Empieza en silencio
-  gain.gain.exponentialRampToValueAtTime(               // Attack: sube rápido
-    Math.max(0.05, velocity), now + 0.02
+  gain.gain.setValueAtTime(0.0001, now); // Empieza en silencio
+  gain.gain.exponentialRampToValueAtTime(
+    // Attack: sube rápido
+    Math.max(0.05, velocity),
+    now + 0.02,
   );
-  gain.gain.exponentialRampToValueAtTime(               // Decay: baja gradualmente
-    0.0001, now + duration
+  gain.gain.exponentialRampToValueAtTime(
+    // Decay: baja gradualmente
+    0.0001,
+    now + duration,
   );
 
   // 3. Conectar cadena: osc → gain → master → altavoz
@@ -89,6 +103,7 @@ function playTone(note, frequency, velocity = 0.6, duration = 0.3, source = "man
 ```
 
 **Explicación línea por línea:**
+
 - `createOscillator()` genera una onda periódica pura. Es la base de la síntesis.
 - `osc.type` define la forma de onda: `sine` (suave), `triangle` (medio), `sawtooth` (brillante), `square` (retro/8-bit).
 - `frequency.setValueAtTime(freq, time)` → programa la frecuencia de forma precisa con el reloj de audio (NO con `setTimeout`).
@@ -100,12 +115,27 @@ function playTone(note, frequency, velocity = 0.6, duration = 0.3, source = "man
 
 ```javascript
 const noteFreq = {
-  C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61,
-  G3: 196.0,  A3: 220.0,  B3: 246.94,
-  C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
-  G4: 392.0,  A4: 440.0,  B4: 493.88,
-  C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46,
-  G5: 783.99, A5: 880.0,  B5: 987.77,
+  C3: 130.81,
+  D3: 146.83,
+  E3: 164.81,
+  F3: 174.61,
+  G3: 196.0,
+  A3: 220.0,
+  B3: 246.94,
+  C4: 261.63,
+  D4: 293.66,
+  E4: 329.63,
+  F4: 349.23,
+  G4: 392.0,
+  A4: 440.0,
+  B4: 493.88,
+  C5: 523.25,
+  D5: 587.33,
+  E5: 659.25,
+  F5: 698.46,
+  G5: 783.99,
+  A5: 880.0,
+  B5: 987.77,
 };
 ```
 
@@ -121,7 +151,7 @@ const noteFreq = {
 
 ```javascript
 function drawRing(cx, cy, notes, color) {
-  const arc = (Math.PI * 2) / notes.length;  // Ángulo por nota (2π/7)
+  const arc = (Math.PI * 2) / notes.length; // Ángulo por nota (2π/7)
 
   for (let i = 0; i < notes.length; i += 1) {
     ctx.strokeStyle = color(i);
@@ -133,6 +163,7 @@ function drawRing(cx, cy, notes, color) {
 ```
 
 **Explicación:**
+
 - Cada órbita es un círculo dividido en 7 arcos (uno por nota).
 - `Math.PI * 2` = 360° en radianes. Dividido entre 7 notas = ~51.4° por segmento.
 - `ctx.arc(cx, cy, radius, startAngle, endAngle)` dibuja un arco del círculo.
@@ -143,9 +174,9 @@ function drawRing(cx, cy, notes, color) {
 ```javascript
 stage.addEventListener("mousedown", (event) => {
   const rect = stage.getBoundingClientRect();
-  const x = event.clientX - rect.left;   // Posición relativa al canvas
+  const x = event.clientX - rect.left; // Posición relativa al canvas
   const y = event.clientY - rect.top;
-  const ring = ringOfPoint(x, y);         // ¿Está dentro de un anillo?
+  const ring = ringOfPoint(x, y); // ¿Está dentro de un anillo?
   if (!ring) return;
 
   drag = { active: true, x0: x, y0: y, x1: x, y1: y, ring };
@@ -162,6 +193,7 @@ stage.addEventListener("mouseup", () => {
 ```
 
 **Explicación:**
+
 - `getBoundingClientRect()` convierte coordenadas de pantalla a coordenadas del canvas.
 - La dirección de la bola es **opuesta** al arrastre (como una honda): `drag.x0 - drag.x1`.
 - El factor `0.08` escala la velocidad para que no sea excesiva.
@@ -171,7 +203,7 @@ stage.addEventListener("mouseup", () => {
 
 ```javascript
 function distance(x1, y1, x2, y2) {
-  return Math.hypot(x1 - x2, y1 - y2);   // √((Δx)² + (Δy)²)
+  return Math.hypot(x1 - x2, y1 - y2); // √((Δx)² + (Δy)²)
 }
 
 function ringOfPoint(x, y) {
@@ -179,7 +211,7 @@ function ringOfPoint(x, y) {
   const dR = distance(x, y, centers.rightX, centers.centerY);
   if (dL <= centers.radius) return "left";
   if (dR <= centers.radius) return "right";
-  return null;   // Fuera de ambos anillos
+  return null; // Fuera de ambos anillos
 }
 ```
 
@@ -194,11 +226,11 @@ function collideBall(ball) {
   const notes = ball.ring === "left" ? ringA : ringB;
 
   const d = distance(ball.x, ball.y, cx, cy);
-  if (d + ball.radius < centers.radius) return;  // Aún dentro, no hay colisión
+  if (d + ball.radius < centers.radius) return; // Aún dentro, no hay colisión
 
   // 1. Ángulo de la bola respecto al centro
   const angle = Math.atan2(ball.y - cy, ball.x - cx);
-  const normalized = (angle + Math.PI * 2) % (Math.PI * 2);  // 0 a 2π
+  const normalized = (angle + Math.PI * 2) % (Math.PI * 2); // 0 a 2π
 
   // 2. ¿Qué nota del arco golpeó?
   const arc = (Math.PI * 2) / notes.length;
@@ -209,11 +241,11 @@ function collideBall(ball) {
   playTone(note, noteFreq[note], 0.5, 0.28, "collision");
 
   // 4. Reflexión especular
-  const nx = (ball.x - cx) / d;  // Normal unitaria X
-  const ny = (ball.y - cy) / d;  // Normal unitaria Y
-  const dot = ball.dx * nx + ball.dy * ny;  // Producto punto
-  ball.dx = ball.dx - 2 * dot * nx;         // Reflejo X
-  ball.dy = ball.dy - 2 * dot * ny;         // Reflejo Y
+  const nx = (ball.x - cx) / d; // Normal unitaria X
+  const ny = (ball.y - cy) / d; // Normal unitaria Y
+  const dot = ball.dx * nx + ball.dy * ny; // Producto punto
+  ball.dx = ball.dx - 2 * dot * nx; // Reflejo X
+  ball.dy = ball.dy - 2 * dot * ny; // Reflejo Y
 
   // 5. Corregir overlap (evitar que se quede pegada al borde)
   const overlap = d + ball.radius - centers.radius;
@@ -223,6 +255,7 @@ function collideBall(ball) {
 ```
 
 **Explicación detallada:**
+
 - `Math.atan2(dy, dx)` devuelve el ángulo en radianes (-π a π). Lo normalizamos a 0–2π.
 - Dividimos el ángulo entre el arco por nota para saber **qué segmento** del anillo golpea.
 - **Reflexión especular:** la fórmula $\vec{v'} = \vec{v} - 2(\vec{v} \cdot \hat{n})\hat{n}$ refleja el vector velocidad respecto a la normal de la superficie.
@@ -235,26 +268,37 @@ function collideBall(ball) {
 ```javascript
 function updatePhysics() {
   for (const ball of balls) {
-    ball.x += ball.dx;    // Mover en X
-    ball.y += ball.dy;    // Mover en Y
-    collideBall(ball);    // Comprobar y resolver colisión
+    ball.x += ball.dx; // Mover en X
+    ball.y += ball.dy; // Mover en Y
+    collideBall(ball); // Comprobar y resolver colisión
   }
 }
 
 function render() {
   drawBackground();
-  drawRing(centers.leftX, centers.centerY, ringA, (i) => `hsl(${190 + i * 10},90%,62%)`);
-  drawRing(centers.rightX, centers.centerY, ringB, (i) => `hsl(${320 - i * 10},90%,64%)`);
+  drawRing(
+    centers.leftX,
+    centers.centerY,
+    ringA,
+    (i) => `hsl(${190 + i * 10},90%,62%)`,
+  );
+  drawRing(
+    centers.rightX,
+    centers.centerY,
+    ringB,
+    (i) => `hsl(${320 - i * 10},90%,64%)`,
+  );
   drawBalls();
   drawDragPreview();
-  requestAnimationFrame(render);   // ~60 FPS
+  requestAnimationFrame(render); // ~60 FPS
 }
 
 // En boot():
-setInterval(updatePhysics, 16);    // ~60 updates/segundo
+setInterval(updatePhysics, 16); // ~60 updates/segundo
 ```
 
 **Explicación:**
+
 - `requestAnimationFrame(render)` → el navegador llama a `render()` justo antes de pintar cada frame (~60 FPS). Es más eficiente que `setInterval` para dibujo.
 - `setInterval(updatePhysics, 16)` → 16ms ≈ 60 Hz para la física. Se separa de render para que la física sea independiente del framerate.
 - **¿Por qué dos bucles separados?** Si el navegador pierde frames de render (pestaña en segundo plano), la física sigue avanzando correctamente.
@@ -266,11 +310,15 @@ function drawBalls() {
   for (const ball of balls) {
     // 1. Halo luminoso (gradiente radial)
     const glow = ctx.createRadialGradient(
-      ball.x, ball.y, 2,                 // Centro del gradiente, radio interior
-      ball.x, ball.y, ball.radius * 2.2  // Mismo centro, radio exterior
+      ball.x,
+      ball.y,
+      2, // Centro del gradiente, radio interior
+      ball.x,
+      ball.y,
+      ball.radius * 2.2, // Mismo centro, radio exterior
     );
-    glow.addColorStop(0, ball.color);     // Color sólido en el centro
-    glow.addColorStop(1, "transparent");  // Transparente en el borde
+    glow.addColorStop(0, ball.color); // Color sólido en el centro
+    glow.addColorStop(1, "transparent"); // Transparente en el borde
     ctx.fillStyle = glow;
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius * 2.2, 0, Math.PI * 2);
@@ -294,8 +342,8 @@ function drawBalls() {
 ### 4.1 Construir el grid interactivo
 
 ```javascript
-const gridRows = 7;    // 7 notas: C5, B4, A4, G4, F4, E4, D4
-const gridCols = 16;   // 16 pasos
+const gridRows = 7; // 7 notas: C5, B4, A4, G4, F4, E4, D4
+const gridCols = 16; // 16 pasos
 let grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(0));
 
 function buildGridUI() {
@@ -309,7 +357,7 @@ function buildGridUI() {
       if (grid[r][c]) cell.classList.add("active");
 
       cell.addEventListener("click", () => {
-        grid[r][c] = grid[r][c] ? 0 : 1;            // Toggle: 0→1, 1→0
+        grid[r][c] = grid[r][c] ? 0 : 1; // Toggle: 0→1, 1→0
         cell.classList.toggle("active", Boolean(grid[r][c]));
       });
 
@@ -320,6 +368,7 @@ function buildGridUI() {
 ```
 
 **Explicación:**
+
 - `Array.from({ length: 7 }, () => Array(16).fill(0))` → crea una matriz 7×16 llena de ceros.
 - Cada celda es un `<button>` con `data-r` y `data-c` para identificar fila/columna.
 - Toggle: si la celda está activa (1) se desactiva (0) y viceversa.
@@ -329,32 +378,33 @@ function buildGridUI() {
 
 ```javascript
 function playSequencerStep() {
-  markPlayingColumn(state.step);  // Resaltar columna actual
+  markPlayingColumn(state.step); // Resaltar columna actual
 
   for (let r = 0; r < gridRows; r += 1) {
-    if (!grid[r][state.step]) continue;    // Si la celda está vacía, saltar
-    const note = notesRows[r];              // notesRows = ["C5","B4","A4","G4","F4","E4","D4"]
+    if (!grid[r][state.step]) continue; // Si la celda está vacía, saltar
+    const note = notesRows[r]; // notesRows = ["C5","B4","A4","G4","F4","E4","D4"]
     playTone(note, noteFreq[note], 0.35, 0.22, "sequencer");
   }
 
-  state.step = (state.step + 1) % gridCols;  // Avanzar y volver al 0 en el 16
+  state.step = (state.step + 1) % gridCols; // Avanzar y volver al 0 en el 16
 }
 
 function startSequencer() {
-  if (state.seqTimer) return;    // No duplicar
+  if (state.seqTimer) return; // No duplicar
   ensureAudio();
-  const interval = Math.max(50, Math.floor((60_000 / state.bpm) / 4));
+  const interval = Math.max(50, Math.floor(60_000 / state.bpm / 4));
   state.seqTimer = setInterval(playSequencerStep, interval);
 }
 
 function stopSequencer() {
   clearInterval(state.seqTimer);
   state.seqTimer = null;
-  markPlayingColumn(-1);   // Quitar resaltado
+  markPlayingColumn(-1); // Quitar resaltado
 }
 ```
 
 **Explicación:**
+
 - **BPM a milisegundos:** `60_000 / bpm / 4` → convierte BPM (beats por minuto) a ms por step. A 120 BPM: 60000/120/4 = 125ms por step.
 - `Math.max(50, ...)` → mínimo 50ms para evitar intervalos demasiado cortos.
 - `% gridCols` → al llegar al paso 16, vuelve a 0 (bucle infinito).
@@ -379,7 +429,7 @@ function markPlayingColumn(col) {
 
 ```css
 .cell.playing {
-  border-color: var(--warn);  /* Borde dorado para la columna activa */
+  border-color: var(--warn); /* Borde dorado para la columna activa */
 }
 ```
 
@@ -395,7 +445,7 @@ function markPlayingColumn(col) {
 function captureScene() {
   return {
     balls: balls.map((ball) => ({
-      x: Number((ball.x / width).toFixed(4)),     // Normalizar a 0–1
+      x: Number((ball.x / width).toFixed(4)), // Normalizar a 0–1
       y: Number((ball.y / height).toFixed(4)),
       dx: Number(ball.dx.toFixed(3)),
       dy: Number(ball.dy.toFixed(3)),
@@ -419,7 +469,7 @@ function applyScene(scene) {
     return;
   }
   balls = scene.balls.map((ball) => ({
-    x: ball.x * width,      // Desnormalizar: fracción × ancho real
+    x: ball.x * width, // Desnormalizar: fracción × ancho real
     y: ball.y * height,
     dx: ball.dx,
     dy: ball.dy,
@@ -449,8 +499,8 @@ el.saveForm.addEventListener("submit", async (event) => {
       title,
       bpm: state.bpm,
       synthType: state.synthType,
-      grid,                     // Matriz 7×16 de 0s y 1s
-      scene: captureScene(),    // Bolas normalizadas
+      grid, // Matriz 7×16 de 0s y 1s
+      scene: captureScene(), // Bolas normalizadas
     }),
   });
 
@@ -490,6 +540,7 @@ def save_composition():
 ```
 
 **Explicación:**
+
 - `json.dumps(grid)` serializa la matriz Python a string JSON para guardar en SQLite (campo TEXT).
 - `json.dumps(scene)` hace lo mismo con la escena de bolas.
 - Al cargar se usa `json.loads()` para deserializar de vuelta a Python dict/list.
@@ -502,13 +553,13 @@ button.addEventListener("click", async () => {
   const res = await api(`/api/compositions/${id}`);
   const comp = res.composition;
 
-  grid = comp.grid;                        // Restaurar grid
-  state.bpm = comp.bpm;                    // Restaurar BPM
-  state.synthType = comp.synth_type;       // Restaurar oscilador
-  el.bpm.value = String(comp.bpm);         // Sincronizar UI
+  grid = comp.grid; // Restaurar grid
+  state.bpm = comp.bpm; // Restaurar BPM
+  state.synthType = comp.synth_type; // Restaurar oscilador
+  el.bpm.value = String(comp.bpm); // Sincronizar UI
   el.synthType.value = comp.synth_type;
-  applyScene(comp.scene);                  // Restaurar bolas
-  buildGridUI();                           // Reconstruir grid visual
+  applyScene(comp.scene); // Restaurar bolas
+  buildGridUI(); // Reconstruir grid visual
 });
 ```
 
@@ -586,6 +637,7 @@ LIMIT 10
 ```
 
 **Explicación:**
+
 - `LEFT JOIN` → incluye performers SIN sesiones (aparecen con 0).
 - `COALESCE(SUM(...), 0)` → si SUM es NULL (0 sesiones), devuelve 0 en vez de NULL.
 - `GROUP BY` → agrupa todas las filas del mismo performer para que COUNT y SUM funcionen.
@@ -665,7 +717,7 @@ if (state.sessionId) {
       velocity,
       payload: { source, synth: state.synthType },
     }),
-  }).catch(() => {});  // Fire-and-forget (no bloquea la UI)
+  }).catch(() => {}); // Fire-and-forget (no bloquea la UI)
 }
 ```
 
@@ -692,6 +744,7 @@ window.addEventListener("beforeunload", () => {
 ```
 
 **Explicación:**
+
 - `beforeunload` se dispara cuando el usuario cierra la pestaña o navega fuera.
 - `navigator.sendBeacon()` envía datos de forma **asíncrona sin bloquear** el cierre. A diferencia de `fetch()`, el navegador garantiza que se envíe incluso si la página ya se está cerrando.
 - Calcula el promedio de frecuencia: `frequencyAcc / totalNotes` (suma de Hz / total de notas).
@@ -702,18 +755,18 @@ window.addEventListener("beforeunload", () => {
 
 ```javascript
 const state = {
-  performerId: null,     // ID del performer registrado
-  performerName: "",     // Nombre
-  sessionId: null,       // Sesión activa (null si no registrado)
-  audioCtx: null,        // AudioContext (se crea con interacción)
-  masterGain: null,      // GainNode maestro
+  performerId: null, // ID del performer registrado
+  performerName: "", // Nombre
+  sessionId: null, // Sesión activa (null si no registrado)
+  audioCtx: null, // AudioContext (se crea con interacción)
+  masterGain: null, // GainNode maestro
   synthType: "triangle", // Tipo de oscilador actual
-  bpm: 108,              // Beats por minuto
-  seqTimer: null,        // ID del setInterval del secuenciador
-  step: 0,               // Paso actual del secuenciador (0–15)
-  totalHits: 0,          // Colisiones en esta sesión
-  totalNotes: 0,         // Notas tocadas en esta sesión
-  frequencyAcc: 0,       // Acumulador de Hz para promedio
+  bpm: 108, // Beats por minuto
+  seqTimer: null, // ID del setInterval del secuenciador
+  step: 0, // Paso actual del secuenciador (0–15)
+  totalHits: 0, // Colisiones en esta sesión
+  totalNotes: 0, // Notas tocadas en esta sesión
+  frequencyAcc: 0, // Acumulador de Hz para promedio
 };
 ```
 
@@ -746,13 +799,15 @@ const state = {
 .layout {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;  /* Panel izdo más ancho */
+  grid-template-columns: 1.2fr 0.8fr; /* Panel izdo más ancho */
   gap: 16px;
   padding: 16px;
 }
 
 @media (max-width: 1100px) {
-  .layout { grid-template-columns: 1fr; }  /* Una columna en móvil */
+  .layout {
+    grid-template-columns: 1fr;
+  } /* Una columna en móvil */
 }
 ```
 
@@ -776,7 +831,7 @@ const state = {
 
 .cell.active {
   background: #36c2ff;
-  box-shadow: 0 0 10px rgba(54, 194, 255, 0.6);  /* Glow azul */
+  box-shadow: 0 0 10px rgba(54, 194, 255, 0.6); /* Glow azul */
 }
 ```
 
@@ -851,5 +906,5 @@ R: Es una fórmula de física que calcula la nueva dirección de un objeto que r
 
 ---
 
-*Documento generado para el examen de PMDM — Synth Orbit Lab*
-*Luis Jahir Rodriguez Cedeño · 53945291X · DAM2 2025/26*
+_Documento generado para el examen de PMDM — Synth Orbit Lab_
+_Luis Jahir Rodriguez Cedeño · 53945291X · DAM2 2025/26_

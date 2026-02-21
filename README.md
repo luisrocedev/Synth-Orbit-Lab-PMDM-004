@@ -11,7 +11,7 @@
 ![Canvas](https://img.shields.io/badge/Canvas_2D-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![License](https://img.shields.io/badge/Licencia-MIT-green?style=flat-square)
 
-*PMDM · Actividad 004 — Síntesis de Sonido · DAM2 2025 / 2026*
+_PMDM · Actividad 004 — Síntesis de Sonido · DAM2 2025 / 2026_
 
 </div>
 
@@ -45,19 +45,19 @@ Todo se ejecuta como una SPA servida por Flask con persistencia SQLite.
 
 ## ✨ Características
 
-| Categoría | Detalle |
-|-----------|---------|
-| **Síntesis de audio** | 4 tipos de oscilador: `sine`, `triangle`, `sawtooth`, `square` |
+| Categoría             | Detalle                                                                  |
+| --------------------- | ------------------------------------------------------------------------ |
+| **Síntesis de audio** | 4 tipos de oscilador: `sine`, `triangle`, `sawtooth`, `square`           |
 | **Física de rebotes** | 2 órbitas (graves C3–B3, agudos C5–B5) con detección de colisión angular |
-| **Secuenciador** | Grid 16 pasos × 7 notas (C5 → D4), BPM ajustable (60–220) |
-| **Drag & launch** | Arrastra en el canvas para lanzar bolas con dirección y velocidad |
-| **Composiciones** | Guarda grid + escena física completa y recárgala desde la BD |
-| **Telemetría** | Eventos `note` y `spawn_ball` con frecuencia, velocidad y contexto |
-| **Leaderboard** | Ranking por notas, hits y sesiones con `LEFT JOIN` + `GROUP BY` |
-| **Métricas globales** | KPIs: performers, composiciones, sesiones, eventos totales |
-| **Envolvente ADSR** | Attack/Decay con `exponentialRampToValueAtTime` |
-| **Session Guard** | `navigator.sendBeacon()` cierra sesión al cerrar pestaña |
-| **Responsive** | `@media (max-width: 1100px)` adapta a una columna |
+| **Secuenciador**      | Grid 16 pasos × 7 notas (C5 → D4), BPM ajustable (60–220)                |
+| **Drag & launch**     | Arrastra en el canvas para lanzar bolas con dirección y velocidad        |
+| **Composiciones**     | Guarda grid + escena física completa y recárgala desde la BD             |
+| **Telemetría**        | Eventos `note` y `spawn_ball` con frecuencia, velocidad y contexto       |
+| **Leaderboard**       | Ranking por notas, hits y sesiones con `LEFT JOIN` + `GROUP BY`          |
+| **Métricas globales** | KPIs: performers, composiciones, sesiones, eventos totales               |
+| **Envolvente ADSR**   | Attack/Decay con `exponentialRampToValueAtTime`                          |
+| **Session Guard**     | `navigator.sendBeacon()` cierra sesión al cerrar pestaña                 |
+| **Responsive**        | `@media (max-width: 1100px)` adapta a una columna                        |
 
 ---
 
@@ -138,18 +138,18 @@ Una composición guarda: el estado del grid (matriz 7×16), la escena física (p
 
 ## 📡 API REST
 
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| `POST` | `/api/performers/register` | Registrar performer `{name, dni}` |
-| `POST` | `/api/sessions/start` | Iniciar jam session `{performerId}` |
-| `POST` | `/api/sessions/event` | Registrar evento `{sessionId, eventType, note, frequency, velocity}` |
-| `POST` | `/api/sessions/end` | Cerrar sesión `{sessionId, totalHits, totalNotes, avgFrequency}` |
-| `POST` | `/api/compositions` | Guardar composición `{performerId, title, bpm, synthType, grid, scene}` |
-| `GET`  | `/api/compositions` | Listar composiciones (últimas 25) |
-| `GET`  | `/api/compositions/:id` | Obtener composición por ID con grid y escena |
-| `GET`  | `/api/leaderboard` | Top 10 performers por notas/hits/sesiones |
-| `GET`  | `/api/stats` | Métricas globales (performers, compositions, sessions, events) |
-| `GET`  | `/api/health` | Health check con timestamp UTC |
+| Método | Ruta                       | Descripción                                                             |
+| ------ | -------------------------- | ----------------------------------------------------------------------- |
+| `POST` | `/api/performers/register` | Registrar performer `{name, dni}`                                       |
+| `POST` | `/api/sessions/start`      | Iniciar jam session `{performerId}`                                     |
+| `POST` | `/api/sessions/event`      | Registrar evento `{sessionId, eventType, note, frequency, velocity}`    |
+| `POST` | `/api/sessions/end`        | Cerrar sesión `{sessionId, totalHits, totalNotes, avgFrequency}`        |
+| `POST` | `/api/compositions`        | Guardar composición `{performerId, title, bpm, synthType, grid, scene}` |
+| `GET`  | `/api/compositions`        | Listar composiciones (últimas 25)                                       |
+| `GET`  | `/api/compositions/:id`    | Obtener composición por ID con grid y escena                            |
+| `GET`  | `/api/leaderboard`         | Top 10 performers por notas/hits/sesiones                               |
+| `GET`  | `/api/stats`               | Métricas globales (performers, compositions, sessions, events)          |
+| `GET`  | `/api/health`              | Health check con timestamp UTC                                          |
 
 ---
 
@@ -191,18 +191,18 @@ Synth-Orbit-Lab-PMDM-004/
 
 ## 🎓 Contexto académico
 
-| Campo | Valor |
-|-------|-------|
-| **Módulo** | PMDM — Programación Multimedia y Dispositivos Móviles |
-| **Actividad** | 004 — Síntesis de Sonido |
-| **Ciclo** | DAM2 · Curso 2025 / 2026 |
-| **Alumno** | Luis Jahir Rodriguez Cedeño |
-| **DNI** | 53945291X |
+| Campo         | Valor                                                 |
+| ------------- | ----------------------------------------------------- |
+| **Módulo**    | PMDM — Programación Multimedia y Dispositivos Móviles |
+| **Actividad** | 004 — Síntesis de Sonido                              |
+| **Ciclo**     | DAM2 · Curso 2025 / 2026                              |
+| **Alumno**    | Luis Jahir Rodriguez Cedeño                           |
+| **DNI**       | 53945291X                                             |
 
 ---
 
 <div align="center">
 
-*Synth Orbit Lab — Donde la física encuentra la música*
+_Synth Orbit Lab — Donde la física encuentra la música_
 
 </div>
